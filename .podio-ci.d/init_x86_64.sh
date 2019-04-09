@@ -25,7 +25,7 @@ if [ ! -d "/cvmfs/sft.cern.ch" ]; then
     exit 1
 fi
 
-COMPILER_VERSION="gcc7"
+COMPILER_VERSION="gcc8"
 LCG_VERSION="95"
 
 #--------------------------------------------------------------------------------
