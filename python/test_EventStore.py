@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+from __future__ import unicode_literals, absolute_import, print_function
 import unittest
 from EventStore import EventStore
 import os
@@ -116,6 +118,6 @@ if __name__ == "__main__":
     # creating example file for the tests
     if not os.path.isfile('example.root'):
         write = '{podio}/tests/write'.format(podio=os.environ['PODIO'])
-        print write
+        print(write)
         call(write)
     unittest.main()

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+from __future__ import absolute_import, unicode_literals
 from ROOT import gSystem
 gSystem.Load("libpodio")
 from ROOT import podio

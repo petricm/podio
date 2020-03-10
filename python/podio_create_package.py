@@ -1,15 +1,13 @@
 #!/usr/bin/env python
+'''
+  This script creates a data model package according to the following
 
-# This script creates a data model package according to the following
-# structure:
-#
-# CMakeLists.txt
-# definitions/
-#
-#
+  CMakeLists.txt
+  definitions/
+'''
 
+from __future__ import unicode_literals, absolute_import
 
-##########################
 if __name__ == "__main__":
     from optparse import OptionParser
 

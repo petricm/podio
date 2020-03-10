@@ -1,5 +1,6 @@
- #!/usr/bin/env python
+#!/usr/bin/env python
 
+from __future__ import absolute_import, unicode_literals, print_function
 from collections import OrderedDict
 
 import os
@@ -50,8 +51,8 @@ class ClassGenerator(object):
         try:
             cformat_exe = subprocess.check_output(['which', 'clang-format']).strip()
         except subprocess.CalledProcessError:
-            print "ERROR: Cannot find clang-format executable"
-            print "       Please make sure it is in the PATH."
+            print("ERROR: Cannot find clang-format executable")
+            print("       Please make sure it is in the PATH.")
             self.clang_format = []
             return
         self.clang_format = [cformat_exe, "-style=file", "-fallback-style=llvm"]
@@ -90,14 +91,14 @@ class ClassGenerator(object):
                              self.install_dir
                              )
         cntr = 0
-        print
+        print()
         for figline, summaryline in zip(figure, text.splitlines()):
             cntr += 1
-            print figline + summaryline
+            print(figline + summaryline)
         for i in xrange(cntr, len(figure)):
-            print figure[i]
-        print "     'Homage to the Square' - Josef Albers"
-        print
+            print(figure[i])
+        print("     'Homage to the Square' - Josef Albers")
+        print()
 
     def get_template(self, filename):
         templatefile = os.path.join(self.template_dir, filename)
@@ -490,7 +491,7 @@ class ClassGenerator(object):
         # TODO: add loading of code from external files
         if( extra.has_key("includes")):
             datatype["includes"].append( extra["includes"] )
-            print " ***** adding includes : " ,  extra["includes"] , "to" ,  datatype["includes"]
+            print(" ***** adding includes : " ,  extra["includes"] , "to" ,  datatype["includes"])
 
 
       ostream_implementation += "  return o ;\n}\n"
@@ -1132,4 +1133,4 @@ if __name__ == "__main__":
   gen.configure_clang_format(options.clangformat)
   gen.process()
   for warning in gen.warnings:
-      print warning
+      print(warning)
