@@ -7,6 +7,7 @@ import re
 
 from collections import OrderedDict
 import six
+from io import open
 
 def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
     class OrderedLoader(Loader):

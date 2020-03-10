@@ -11,6 +11,7 @@ from podio_config_reader import PodioConfigReader, ClassDefinitionValidator
 from podio_templates import declarations, implementations
 from six.moves import range
 import six
+from io import open
 thisdir = os.path.dirname(os.path.abspath(__file__))
 
 _text_ = """
