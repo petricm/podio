@@ -10,6 +10,7 @@ import subprocess
 from podio_config_reader import PodioConfigReader, ClassDefinitionValidator
 from podio_templates import declarations, implementations
 from six.moves import range
+import six
 thisdir = os.path.dirname(os.path.abspath(__file__))
 
 _text_ = """
@@ -68,15 +69,15 @@ class ClassGenerator(object):
         self.print_report()
 
     def process_components(self, content):
-        self.requested_classes += content.keys()
-        for name, components in content.iteritems():
+        self.requested_classes += list(content.keys())
+        for name, components in six.iteritems(content):
             self.create_component(name, components["Members"])
 
     def process_datatypes(self, content):
-        for name in content.iterkeys():
+        for name in six.iterkeys(content):
             self.requested_classes.append(name)
             self.requested_classes.append("%sData" % name)
-        for name, components in content.iteritems():
+        for name, components in six.iteritems(content):
             self.create_data(name, components)
             self.create_class(name, components)
             self.create_collection(name, components)
@@ -255,14 +256,14 @@ class ClassGenerator(object):
           klassname = klass
           if "::" in klass:
             mnamespace, klassname = klass.split("::")
-            if mnamespace not in forward_declarations_namespace.keys():
+            if mnamespace not in list(forward_declarations_namespace.keys()):
               forward_declarations_namespace[mnamespace] = []
 
           forward_declarations_namespace[mnamespace] += ["class %s;\n" %(klassname)]
           forward_declarations_namespace[mnamespace] += ["class Const%s;\n" %(klassname)]
           includes_cc += '#include "%s.h"\n' %(klassname)
 
-      for nsp in forward_declarations_namespace.iterkeys():
+      for nsp in six.iterkeys(forward_declarations_namespace):
         if nsp != "":
           forward_declarations += "namespace %s {\n" % nsp
         forward_declarations += "".join(forward_declarations_namespace[nsp])
@@ -302,7 +303,7 @@ class ClassGenerator(object):
         if( self.getSyntax ):
           gname = "get" + name[:1].upper() + name[1:]
           sname = "set" + name[:1].upper() + name[1:]
-        if name in all_members.keys():
+        if name in list(all_members.keys()):
           raise Exception("'%s' clashes with another member name in class '%s', previously defined in %s" % (name, classname, all_members[name]))
         all_members[name] = classname
 
@@ -336,7 +337,7 @@ class ClassGenerator(object):
             sub_members = self.component_members[klass]
             for sub_member in sub_members:
               comp_member_class, comp_member_name = sub_member
-              if comp_member_name in all_members.keys():
+              if comp_member_name in list(all_members.keys()):
                 raise Exception("'%s' clashes with another member name in class '%s' (defined in the component '%s' and '%s')" % (comp_member_name, classname, name, all_members[comp_member_name]))
               all_members[comp_member_name] = " member '" + name + "'"
               # use mystructMember with camel case as name to avoid clashes
@@ -582,7 +583,7 @@ class ClassGenerator(object):
         colW = numColWidth+2
         comps = self.reader.components
         compMemStr = ""
-        if t in comps.keys():
+        if t in list(comps.keys()):
           nCompMem = 0
           compMemStr += ' ['
           #print " found component: " , name , t , comps[ t ] , " #members: " , nCompMem
@@ -940,7 +941,7 @@ class ClassGenerator(object):
           if "::" in klass:
             mnamespace, klassname = klass.split("::")
             klassWithQualifier = "::"+mnamespace+"::Const"+klassname
-            if mnamespace not in forward_declarations_namespace.keys():
+            if mnamespace not in list(forward_declarations_namespace.keys()):
               forward_declarations_namespace[mnamespace] = []
           else:
             klassWithQualifier = "Const"+klass
@@ -962,7 +963,7 @@ class ClassGenerator(object):
             set_relations += implementations["set_relations"].format(name=name, klass=klassWithQualifier)
           delete_singlerelations+="\t\tif (m_%s != nullptr) delete m_%s;\n" % (name, name)
 
-      for nsp in forward_declarations_namespace.iterkeys():
+      for nsp in six.iterkeys(forward_declarations_namespace):
         if nsp != "":
           forward_declarations += "namespace %s {" % nsp
         forward_declarations += "".join(forward_declarations_namespace[nsp])

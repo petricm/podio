@@ -6,6 +6,7 @@ import copy
 import re
 
 from collections import OrderedDict
+import six
 
 def ordered_load(stream, Loader=yaml.Loader, object_pairs_hook=OrderedDict):
     class OrderedLoader(Loader):
@@ -68,7 +69,7 @@ class ClassDefinitionValidator(object):
     def check_datatype(self, name, definition):
         self.check_keys(name, definition)
         for category in ("Author", "Description"):
-            if category not in definition.keys():
+            if category not in list(definition.keys()):
                 raise Exception("%s does not define '%s'." % (name, category))
         for category in ("Members", "OneToOneRelations", "OneToManyRelations"):
             if category in definition:
@@ -81,8 +82,8 @@ class ClassDefinitionValidator(object):
             theType = member["type"]
             return  # TODO
             if theType not in self.buildin_types and \
-               theType not in self.datatypes.keys() and \
-               theType not in self.components.keys():
+               theType not in list(self.datatypes.keys()) and \
+               theType not in list(self.components.keys()):
                 raise Exception("%s defines a member of not allowed type %s"
                                 % (name, theType))
 
@@ -96,7 +97,7 @@ class ClassDefinitionValidator(object):
         if not array_match is None:
             name, comment = array_match.group(3), array_match.group(4)
             typ = array_match.group(1)
-            if not typ in self.buildin_types and not typ in self.components.keys():
+            if not typ in self.buildin_types and not typ in list(self.components.keys()):
                 raise Exception("%s defines an array of disallowed type %s"
                                 % (string, typ))
             klass = "std::array<{typ}, {length}>".format(
@@ -122,12 +123,12 @@ class ClassDefinitionValidator(object):
         for mem in definition.keys():
             klass = definition[mem]
             if not (mem == "ExtraCode" or klass in self.buildin_types \
-                    or klass in self.components.keys()):
+                    or klass in list(self.components.keys())):
                 array_match = re.match(self.array_re, klass)
                 builtin_array = False
                 if not array_match is None:
                     typ = array_match.group(1)
-                    if typ in self.buildin_types or typ in self.components.keys():
+                    if typ in self.buildin_types or typ in list(self.components.keys()):
                         builtin_array = True
                 if not builtin_array:
                     raise Exception("'%s' defines a member of a type '%s'"
@@ -135,7 +136,7 @@ class ClassDefinitionValidator(object):
                                     "which is not allowed in a component!")
 
     def check_components(self, components):
-        for klassname, value in components.iteritems():
+        for klassname, value in six.iteritems(components):
             self.check_component(klassname, value)
 
 
@@ -159,13 +160,13 @@ class PodioConfigReader(object):
         stream = open(self.yamlfile, "r")
         content = ordered_load(stream, yaml.SafeLoader)
         validator = ClassDefinitionValidator(content)
-        if "components" in content.keys():
+        if "components" in list(content.keys()):
             validator.check_components(content["components"])
-            for klassname, value in content["components"].iteritems():
+            for klassname, value in six.iteritems(content["components"]):
                 component = {"Members": value}
                 self.components[klassname] = component
         if "datatypes" in content:
-            for klassname, value in content["datatypes"].iteritems():
+            for klassname, value in six.iteritems(content["datatypes"]):
                 validator.check_datatype(klassname, value)
                 datatype = {}
                 datatype["Description"] = value["Description"]
@@ -190,6 +191,6 @@ class PodioConfigReader(object):
                     datatype["ConstExtraCode"] = self.handle_extracode(
                                                      value["ConstExtraCode"])
                 self.datatypes[klassname] = datatype
-        if "options" in content.keys():
-            for option, value in content["options"].iteritems():
+        if "options" in list(content.keys()):
+            for option, value in six.iteritems(content["options"]):
                 self.options[option] = value
