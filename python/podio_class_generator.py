@@ -9,6 +9,7 @@ import pickle
 import subprocess
 from podio_config_reader import PodioConfigReader, ClassDefinitionValidator
 from podio_templates import declarations, implementations
+from six.moves import range
 thisdir = os.path.dirname(os.path.abspath(__file__))
 
 _text_ = """
@@ -95,7 +96,7 @@ class ClassGenerator(object):
         for figline, summaryline in zip(figure, text.splitlines()):
             cntr += 1
             print(figline + summaryline)
-        for i in xrange(cntr, len(figure)):
+        for i in range(cntr, len(figure)):
             print(figure[i])
         print("     'Homage to the Square' - Josef Albers")
         print()

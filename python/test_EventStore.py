@@ -6,6 +6,7 @@ import os
 
 from ROOT import TFile
 from ROOT import ExampleHit, ConstExampleHit
+from six.moves import range
 
 
 class EventStoreTestCase(unittest.TestCase):
@@ -92,7 +93,7 @@ class EventStoreTestCase(unittest.TestCase):
             numbers.append(evinfo[0].Number())
         self.assertEqual(iev+1, 2*events.GetEntries())
         # testing that numbers is [0, .. 1999, 0, .. 1999]
-        self.assertEqual(numbers, range(events.GetEntries())*2)
+        self.assertEqual(numbers, list(range(events.GetEntries()))*2)
         # trying to go to an event beyond the last one
         self.assertRaises(ValueError, self.store.__getitem__,
                           4001)

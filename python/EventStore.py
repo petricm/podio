@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, unicode_literals
 from ROOT import gSystem
+from six.moves import range
 gSystem.Load("libpodio")
 from ROOT import podio
 
@@ -9,7 +10,7 @@ from ROOT import podio
 def iterator(self):
     '''dynamically added iterator'''
     entries = self.size()
-    for entry in xrange(entries):
+    for entry in range(entries):
         yield self.at(entry)
 
 
@@ -102,7 +103,7 @@ class EventStore(object):
         '''
         for nev, store in self.stores:
             self.current_store = store
-            for entry in xrange(store.getEntries()):
+            for entry in range(store.getEntries()):
                 yield store
                 store.endOfEvent()
 

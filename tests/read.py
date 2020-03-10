@@ -3,6 +3,7 @@
 from __future__ import absolute_import, unicode_literals, print_function
 import unittest
 from EventStore import EventStore
+from six.moves import range
 
 if __name__ == '__main__':
 
