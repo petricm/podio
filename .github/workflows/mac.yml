@@ -14,9 +14,9 @@ jobs:
         pip install -r requirements.txt
     - name: Compile and test
       run: |
+        export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Apple/usr/bin"
+        export DYLD_LIBRARY_PATH=""
         source root/bin/thisroot.sh
-        echo $PATH
-        echo $DYLD_LIBRARY_PATH
         which python
         python --version
         python -c "from ROOT import gROOT"
