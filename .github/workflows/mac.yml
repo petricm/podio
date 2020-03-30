@@ -14,6 +14,7 @@ jobs:
         pip install -r requirements.txt
     - name: Compile and test
       run: |
+        which cmake
         export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Apple/usr/bin"
         export DYLD_LIBRARY_PATH=""
         source root/bin/thisroot.sh
