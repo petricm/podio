@@ -15,6 +15,7 @@ jobs:
     - name: Compile and test
       run: |
         source root/bin/thisroot.sh
+        python -c "from ROOT import gROOT"
         mkdir build install
         cd build
         cmake -DCMAKE_INSTALL_PREFIX=../install -DCMAKE_CXX_STANDARD=17  -DCMAKE_CXX_FLAGS=" -fdiagnostics-color=always " ..
