@@ -14,7 +14,6 @@ jobs:
         pip install -r requirements.txt
     - name: Compile and test
       run: |
-        which cmake
         export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/Library/Apple/usr/bin"
         export DYLD_LIBRARY_PATH=""
         source root/bin/thisroot.sh
@@ -23,7 +22,7 @@ jobs:
         python -c "from ROOT import gROOT"
         mkdir build install
         cd build
-        cmake -DCMAKE_INSTALL_PREFIX=../install -DCMAKE_CXX_STANDARD=17  -DCMAKE_CXX_FLAGS=" -fdiagnostics-color=always " ..
+        /usr/local/bin/cmake -DCMAKE_INSTALL_PREFIX=../install -DCMAKE_CXX_STANDARD=17  -DCMAKE_CXX_FLAGS=" -fdiagnostics-color=always " ..
         make -j4 --keep-going
         make install
         ctest --output-on-failure
