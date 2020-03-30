@@ -15,6 +15,8 @@ jobs:
     - name: Compile and test
       run: |
         source root/bin/thisroot.sh
+        which python
+        python --version
         python -c "from ROOT import gROOT"
         mkdir build install
         cd build
